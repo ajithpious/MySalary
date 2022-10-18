@@ -1,26 +1,40 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import RegSuccess from './screens/RegSuccess';
-
-
-const Stack = createNativeStackNavigator();
+import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState } from 'react';
+import { CredentialsContext } from './components/CredentialsContext';
+import RootStack from './navigation/RootStack';
 
 
 export default function App() {
+  const [appReady,setAppReady]=useState(false);
+  const [storedCredentials,setStoredCredentials]=useState("");
+  const checkLoginCredentials=()=>{
+    AsyncStorage.getItem('loginCredentials')
+    .then((result)=>{
+      if(result!==null){
+        setStoredCredentials(JSON.parse(result))
+      }else{
+        setStoredCredentials(null);
+      }
+      console.log("result=",storedCredentials)
+    })
+    .catch(error=>console.log(error))
+  }
+  if(!appReady){
+    return (
+      <AppLoading
+        startAsync={checkLoginCredentials}
+        onFinish={()=>setAppReady(true)}
+        onError={console.warn}
+      />
+    )
+  }
   return (
-    <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen options={{headerShown:false}} name="Login" component={LoginScreen} />
-      <Stack.Screen options={{headerShown:false}} name="Home" component={HomeScreen} />
-      <Stack.Screen options={{headerShown:false}} name="SignUp" component={SignUpScreen} />
-      <Stack.Screen options={{headerShown:false}} name="RegSuccess" component={RegSuccess} />
-    </Stack.Navigator>
-  </NavigationContainer>
+    <CredentialsContext.Provider value={{storedCredentials,setStoredCredentials}}>
+      <RootStack/>
+    </CredentialsContext.Provider>
   );
 } 
 
