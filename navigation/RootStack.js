@@ -7,7 +7,11 @@ import RegSuccess from '../screens/RegSuccess';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CredentialsContext } from '../components/CredentialsContext';
-const Stack = createNativeStackNavigator();
+import Home from '../screens/Home';
+import { createStackNavigator } from '@react-navigation/stack';
+import AI from '../screens/AI';
+import Profile from '../screens/Profile';
+const Stack = createStackNavigator();
 
 const RootStack = () => {
   return (
@@ -23,8 +27,10 @@ const RootStack = () => {
                 <Stack.Screen options={{headerShown:false}} name="SignUp" component={SignUpScreen} />
                 </>
             }
+            <Stack.Screen options={{headerShown:false}} name="AIStack" component={AI} />
+            <Stack.Screen options={{headerShown:false}} name="ProfileStack" component={Profile} />
             <Stack.Screen options={{headerShown:false}} name="RegSuccess" component={RegSuccess} />
-            {/* <Stack.Screen options={{headerShown:false}} name="Home" component={HomeScreen} /> */}
+            <Stack.Screen options={{headerShown:false}} name="NewHome" component={Home} />
             </Stack.Navigator>
             </NavigationContainer>
         )}

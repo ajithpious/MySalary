@@ -1,29 +1,49 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer, TabActions, useNavigation } from '@react-navigation/native';
 import { CredentialsContext } from '../components/CredentialsContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AI from './AI';
+import Profile from './Profile';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const HomeScreen = () => {
+  const Tab = createBottomTabNavigator()
   const navigation = useNavigation();
-  const {storedCredentials,setStoredCredentials}=useContext(CredentialsContext)
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext)
   const handleLogout = () => {
     AsyncStorage.removeItem('loginCredentials')
-    .then(()=>{
-      setStoredCredentials('');
-    })
-    .catch((error)=>console.log(error))
+      .then(() => {
+        setStoredCredentials('');
+      })
+      .catch((error) => console.log(error))
   }
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={styles.button}
+      <Tab.Navigator screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'AI') {
+            iconName = focused
+              ? 'ios-information-circle'
+              : 'ios-information-circle-outline';
+          } else if (route.name === 'Profile') {
+            iconName = 'team'; 
+          }
+
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'green',
+        tabBarInactiveTintColor: 'gray',
+      })}
+      
       >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-    </View>
+        <Tab.Screen name='AI' component={AI} />
+        <Tab.Screen name='Profile' component={Profile} />
+      </Tab.Navigator>
   )
 }
 
