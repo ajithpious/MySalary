@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
 import { CredentialsContext } from './components/CredentialsContext';
 import RootStack from './navigation/RootStack';
+import { NativeBaseProvider } from 'native-base';
+import { BaseTheme } from './Theme/';
+import config from './nativeBase.config';
 
 
 
@@ -33,9 +36,11 @@ export default function App() {
     )
   }
   return (
+    <NativeBaseProvider theme={BaseTheme} config={config}>
     <CredentialsContext.Provider value={{storedCredentials,setStoredCredentials}}>
       <RootStack/>
     </CredentialsContext.Provider>
+    </NativeBaseProvider>
   );
 } 
 

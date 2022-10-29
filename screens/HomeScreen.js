@@ -21,27 +21,25 @@ const HomeScreen = () => {
       .catch((error) => console.log(error))
   }
   return (
-      <Tab.Navigator screenOptions={({ route }) => ({
+      <Tab.Navigator screenOptions={({ route}) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
-          if (route.name === 'AI') {
-            iconName = focused
-              ? 'ios-information-circle'
-              : 'ios-information-circle-outline';
+          if (route.name==='home') {
+            iconName = 'home';
           } else if (route.name === 'Profile') {
-            iconName = 'team'; 
+            iconName = 'people';
           }
 
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
+        headerShown:false,
         tabBarActiveTintColor: 'green',
         tabBarInactiveTintColor: 'gray',
       })}
       
       >
-        <Tab.Screen name='AI' component={AI} />
+        <Tab.Screen name='home' component={AI} />
         <Tab.Screen name='Profile' component={Profile} />
       </Tab.Navigator>
   )
