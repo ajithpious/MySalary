@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AI from '../screens/AI';
 import Profile from '../screens/Profile';
 import { Box, useColorMode, useColorModeValue, useToken } from 'native-base';
+import Shifts from '../screens/Shifts';
 const Stack = createStackNavigator();
 
 const RootStack = () => {
@@ -56,6 +57,7 @@ const RootStack = () => {
               <Stack.Screen options={{ headerShown: false }} name="ProfileStack" component={Profile} />
               <Stack.Screen options={{ headerShown: false }} name="RegSuccess" component={RegSuccess} />
               <Stack.Screen options={{ headerShown: false }} name="NewHome" component={Home} />
+              <Stack.Screen options={{ headerShown: false }} name="Shifts" component={Shifts} />
             </Stack.Navigator>
           </Box>
         </NavigationContainer>

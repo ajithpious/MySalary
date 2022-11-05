@@ -21,8 +21,6 @@ const LoginScreen = () => {
     .catch((error)=>{
       console.log(error)
     })
-
-
   }
   const handleLogin = () => {
     setLoading(true)

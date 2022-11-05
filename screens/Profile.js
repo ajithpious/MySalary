@@ -16,7 +16,6 @@
 // }
 
 import React from 'react';
-// import Images from '../config/Images';
 import {
   Button,
   Container,

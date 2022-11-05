@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredentialsContext } from '../components/CredentialsContext';
-import { Box, Button, Divider, Heading, Text, HStack, List, ScrollView, Switch, useColorMode, useTheme, Fab, Icon, Stack, AspectRatio, Image, Center } from "native-base";
+import { Box, Button, Divider, Heading, Text, HStack, List, ScrollView, Switch, useColorMode, useTheme, Fab, Icon, Stack, AspectRatio, Image, Center, Pressable } from "native-base";
 import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { DatePicker } from 'react-native-week-month-date-picker';
@@ -37,68 +37,9 @@ export default function AI() {
   return (
     <Box bg={colorMode === 'dark' ? 'black' : 'white'} pt={12}>
       <Heading p={3} mx={2}>
-        App Name
+        MyRota
       </Heading>
       <ScrollView contentContainerStyle={{ width: '100%' }}>
-        {/* <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
-        <Fab renderInPortal={false} shadow={2} size="sm" placement="bottom-right" icon={colorMode == 'light' ?
-          <Ionicons
-            name="moon-sharp"
-            size={24}
-            onPress={toggleColorMode}
-            color={colorMode == 'dark' ? 'white' : 'black'}
-          /> : <Entypo
-            name="light-up"
-            size={24}
-            onPress={toggleColorMode}
-            color={colorMode == 'dark' ? 'white' : 'black'} />} />
-        <Button size="sm" variant="subtle" onPress={handleLogout}>
-          Log Out
-        </Button>
-        <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
-        <Divider mt={12} opacity={colorMode == 'dark' ? '0.4' : '1'} />
-        <List
-          divider={
-            <Divider ml={16} opacity={colorMode == 'dark' ? '0.4' : '1'} />
-          }
-          px={3}
-          // mt={12}
-          py={0}
-          // borderColor="red.200"
-          borderWidth={0}
-          borderRightWidth={0}
-          w="100%"
-        >
-          {components.map((comp, index) => (
-            <List.Item
-              key={index}
-              onPress={() =>
-                navigation.navigate('component', { name: comp.name })
-              }
-              _hover={{ bg: 'coolGray.300' }}
-            >
-              <HStack space={3} py={1} alignItems="center" w="100%">
-                <Box mr={4}>
-                  <Entypo
-                    name="circular-graph"
-                    size={32}
-                    color={colorMode === 'dark' ? 'white' : 'black'}
-                  />
-                </Box>
-
-                <Text>{comp.name}</Text>
-                <Box ml="auto">
-                  <Icon
-                    mr={2}
-                    size="sm"
-                    as={<MaterialCommunityIcons name="chevron-right" />}
-                    color="coolGray.500"
-                  />
-                </Box>
-              </HStack>
-            </List.Item>
-          ))}
-        </List> */}
         <Box alignItems="center">
       <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{
       borderColor: "coolGray.600",
@@ -109,20 +50,18 @@ export default function AI() {
     }} _light={{
       backgroundColor: "gray.50"
     }}>
+      <Pressable onPress={()=>{navigation.navigate('Shifts')}}>
         <Box>
-          <AspectRatio w="100%" ratio={16 / 9}>
-            <Image source={{
-            uri: "https://www.holidify.com/images/cmsuploads/compressed/Bangalore_citycover_20190613234056.jpg"
-          }} alt="image" />
-          </AspectRatio>
+            <Image source={require('../config/Images/shifts_image.png')} resizeMode="cover" height={200} alt="image" />
         </Box>
         <Stack p="4" space={3}>
           <Stack space={2}>
             <Heading size="md" ml="-1">
-              My .....
+              Shifts
             </Heading>
           </Stack>
         </Stack>
+        </Pressable>
       </Box>
     </Box>
     
@@ -147,20 +86,13 @@ export default function AI() {
         <Stack p="4" space={3}>
           <Stack space={2}>
             <Heading size="md" ml="-1">
-              sdv
+              Availability
             </Heading>
           </Stack>
         </Stack>
       </Box>
     </Box>
     </View>
-        <Calendar
-          markingType={'multi-dot'}
-          markedDates={{
-            '2017-10-25': { dots: [vacation, massage, workout], selected: true, selectedColor: 'red' },
-            '2017-10-26': { dots: [massage, workout], disabled: true }
-          }}
-        />
       </ScrollView>
     </Box>
   )
