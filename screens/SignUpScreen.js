@@ -1,7 +1,9 @@
 import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
+import { cos } from 'react-native-reanimated'
+import { CredentialsContext } from '../components/CredentialsContext'
 
 const SignUpScreen = () => {
 
@@ -10,15 +12,25 @@ const SignUpScreen = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
+    const {storedCredentials,setStoredCredentials}=useContext(CredentialsContext)
+    const usersDB = db.collection('users');
     const handleRegister = () => {
         setLoading(true)
         auth.createUserWithEmailAndPassword(email, password)
-            .then(userCredentials => {
+            .then(async (userCredentials) => {
                 const user = userCredentials.user;
                 console.log(user.email)
-                navigation.navigate('RegSuccess');
+                
+                const userRef=usersDB.doc(user.email);
+                await userRef.set({
+                    "username":name,
+                    'shifts':""
+                  });
+                // navigation.navigate('RegSuccess');
                 setLoading(false)
+                setStoredCredentials(user.email)
             }).catch(error => {
+                console.log(error)
                 alert(error.message)
                 setLoading(false)
             })

@@ -15,7 +15,7 @@
 //     )
 // }
 
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Button,
   Container,
@@ -25,8 +25,20 @@ import {
   withTheme,
 } from '@draftbit/ui';
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CredentialsContext } from '../components/CredentialsContext';
+
 const Profile = props => {
+  const {storedCredentials,setStoredCredentials}=useContext(CredentialsContext)
   const { theme } = props;
+
+  const handleLogout = () => {
+    AsyncStorage.removeItem('loginCredentials')
+      .then(() => {
+        setStoredCredentials('');
+      })
+      .catch((error) => console.log(error))
+  }
   return (
     <ScreenContainer
       style={styles.screenContainerJb}
@@ -120,15 +132,16 @@ const Profile = props => {
             styles.touchableJg,
             { borderColor: theme.colors.divider },
           ])}
+          onPress={handleLogout}
         >
           <View style={styles.viewAl}>
-            <Text style={theme.typography.body1}>Payment Details</Text>
-            <Icon
+            <Text style={theme.typography.body1}>Log Out</Text>
+            {/* <Icon
               style={styles.iconZb}
               size={24}
               name="MaterialIcons/payment"
               color={theme.colors.strong}
-            />
+            /> */}
           </View>
         </Touchable>
       </Container>

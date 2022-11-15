@@ -6,13 +6,14 @@ import SignUpScreen from '../screens/SignUpScreen';
 import RegSuccess from '../screens/RegSuccess';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { CredentialsContext } from '../components/CredentialsContext';
+import { CredentialsContext, DataContext } from '../components/CredentialsContext';
 import Home from '../screens/Home';
 import { createStackNavigator } from '@react-navigation/stack';
 import AI from '../screens/AI';
 import Profile from '../screens/Profile';
 import { Box, useColorMode, useColorModeValue, useToken } from 'native-base';
 import Shifts from '../screens/Shifts';
+import { useContext } from 'react';
 const Stack = createStackNavigator();
 
 const RootStack = () => {
@@ -23,6 +24,8 @@ const RootStack = () => {
   );
   const bgColor = useColorModeValue(lightBg, darkBg)
   console.log(bgColor)
+  const {storedShiftData}=useContext(DataContext)
+  console.log("data=",storedShiftData)
   return (
     <CredentialsContext.Consumer>
       {({ storedCredentials }) => (

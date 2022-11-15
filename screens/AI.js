@@ -50,7 +50,9 @@ export default function AI() {
     }} _light={{
       backgroundColor: "gray.50"
     }}>
-      <Pressable onPress={()=>{navigation.navigate('Shifts')}}>
+      <Pressable onPress={()=>{
+        navigation.navigate('Shifts')
+        }}>
         <Box>
             <Image source={require('../config/Images/shifts_image.png')} resizeMode="cover" height={200} alt="image" />
         </Box>
