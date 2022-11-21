@@ -17,12 +17,12 @@ const Shifts = () => {
     const [shiftType, setShiftType] = useState(false)
     const [selectedDay, setSelectedDay] = useState("");
     const [shifts, setShifts] = useState({});
-    const hasUnsavedChanges = Boolean(Object.keys(shifts).length);
+    const [hasUnsavedChanges,setUnsavedChanges] = useState(false);
     const {shiftData,setShiftData} = useContext(DataContext)
     const today = "2022-11-01"
     const usersDB=db.collection('users');
     const {storedCredentials,setStoredCredentials}=useContext(CredentialsContext)
-    console.log(storedCredentials)
+    // console.log(storedCredentials)
 
     // console.log("shiftdata=", shiftData)
     const {
@@ -30,6 +30,7 @@ const Shifts = () => {
     } = useTheme();
     var s;
     useEffect(() =>{
+        console.log("in useeffect")
             getShifts().then((data)=>{
                     setShifts(Object.assign(data,shifts))
             })
@@ -65,12 +66,42 @@ const Shifts = () => {
         //     );
         //   })
         },
-        [navigation, hasUnsavedChanges,shifts,setShifts,getShifts]
+        []
         );
-    //   useEffect(() => {
-    //     setShifts(Object.assign(getShifts(),shifts))
+      useEffect(() => {
+          navigation.addListener('beforeRemove', (e) => {
+            if (!hasUnsavedChanges) {
+              // If we don't have unsaved changes, then we don't need to do anything
+              return;
+            }
+            if(e['data']['action']['type']=="NAVIGATE"){
+                return;
+            }
+    
+            // Prevent default behavior of leaving the screen
+            e.preventDefault();
+    
+            // Prompt the user before leaving the screen
+            Alert.alert(
+              'Discard changes?',
+              'You have unsaved changes. Are you sure to discard them and leave the screen?',
+              [
+                { text: "Don't leave", style: 'cancel', onPress: () => {} },
+                {
+                  text: 'Discard',
+                  style: 'destructive',
+                  // If the user confirmed, then we dispatch the action we blocked earlier
+                  // This will continue the action that had triggered the removal of the screen
+                  onPress: () => {
+                    // setShifts({})
+                    navigation.navigate('Home')
+                },
+                },
+              ]
+            );
+          })
         
-    // }, [shifts]);
+    }, [navigation,hasUnsavedChanges]);
 
     const persistShifts = async () => {
         // setShifts(Object.assign(shiftData,shifts))
@@ -89,7 +120,8 @@ const Shifts = () => {
                 }
                 else{
                     await user.set(
-                        Object.assign(data.data(),{'shifts':Object.assign(data.data()['shifts'],shifts)})
+                        // Object.assign(data.data(),{'shifts':Object.assign(data.data()['shifts'],shifts)})
+                        Object.assign(data.data(),{'shifts':shifts})
                   );
                 }
                 console.log("d=",Object.assign(data.data()['shifts'],shifts))
@@ -101,6 +133,9 @@ const Shifts = () => {
             })
             navigation.navigate('Home')
             
+    }
+    const clearShift=()=>{
+
     }
     const getShifts = async () => {
         const user=usersDB.doc(storedCredentials)
@@ -167,30 +202,49 @@ const Shifts = () => {
                                 s = shifts
                                 s[selectedDay] = { selected: true, marked: true, selectedColor: colors['green'][300], type: "Long" }
                                 setShifts(s)
+                                setUnsavedChanges(true)
                                 // persistShifts(shifts)
                                 setShiftType(false)
-                            }} style={style.options} bg={colors['green'][300]} variant="subtle">Long Day</Button>
+
+                            }} style={style.options} bg={colors['green'][300]} variant="subtle">
+                                <Text>Long Day</Text></Button>
                             <Button style={style.options} onPress={() => {
                                 s = shifts
                                 s[selectedDay] = { selected: true, marked: true, selectedColor: colors['secondary'][300], type: "Early" }
                                 setShifts(s)
                                 // persistShifts(shifts)
+                                setUnsavedChanges(true)
                                 setShiftType(false)
-                            }} bg={colors['secondary'][300]} variant="subtle">Early</Button>
+                            }} bg={colors['secondary'][300]} variant="subtle">
+                                <Text >Early</Text></Button>
                             <Button style={style.options} onPress={() => {
                                 s = shifts
                                 s[selectedDay] = { selected: true, marked: true, selectedColor: colors['violet'][300], type: "Late" }
                                 setShifts(s)
                                 // persistShifts(shifts)
+                                setUnsavedChanges(true)
                                 setShiftType(false)
-                            }} bg={colors['violet'][300]} variant="subtle">Late</Button>
+                            }} bg={colors['violet'][300]} variant="subtle">
+                                <Text >Late</Text></Button>
                             <Button style={style.options} onPress={() => {
                                 s = shifts
                                 s[selectedDay] = { selected: true, marked: true, selectedColor: colors['dark'][300], type: "Night" }
                                 setShifts(s)
                                 // persistShifts(shifts)
+                                setUnsavedChanges(true)
                                 setShiftType(false)
-                            }} bg={colors['dark'][300]} backgroundColor={colors['dark'][300]} variant="subtle">Night</Button>
+                            }} bg={colors['dark'][300]} backgroundColor={colors['dark'][300]} variant="subtle">
+                                <Text color={"white"}>Night</Text>
+                                </Button>
+                            <Button style={style.options} onPress={() => {
+                                s = shifts
+                                delete s[selectedDay]
+                                setShifts(s)
+                                setUnsavedChanges(true)
+                                console.log("clear=",shifts)
+                                setShiftType(false)
+                            }} bg={colors['red'][300]} backgroundColor={colors['red'][300]} variant="subtle">
+                                <Text >Clear</Text></Button>
                         </View>
                     </View>
                 </View>
@@ -209,8 +263,8 @@ const style = {
         backgroundColor: "white",
         margin: 100,
         alignItems: "center",
-        marginTop: 250,
-        marginBottom: 250,
+        marginTop: 200,
+        marginBottom: 200,
         padding: 30,
         borderRadius: 40,
         flex: 1
