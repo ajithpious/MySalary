@@ -12,6 +12,9 @@ import { DataTable } from 'react-native-paper';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createAppContainer } from "react-navigation";
+import { Provider as PaperProvider } from 'react-native-paper';
+import CustomTab from '../components/CustomTab';
+
 
 
 
@@ -26,6 +29,7 @@ const Shifts = () => {
     const [shifts, setShifts] = useState({});
     const [shiftCount, setShiftCount] = useState({});
     const [month,setMonth]=useState((new Date()).getMonth()+1)
+    const [year,setYear]=useState((new Date()).getFullYear())
     const [hasUnsavedChanges, setUnsavedChanges] = useState(false);
     const { shiftData, setShiftData } = useContext(DataContext)
     const today = "2022-11-01"
@@ -99,7 +103,7 @@ const Shifts = () => {
     }
     const Tab2 = () => {
         return (<View>
-            <Text>efvejrhfv</Text>
+            <CustomTab/>
         </View>)
     }
     const persistShifts = async () => {
@@ -136,8 +140,8 @@ const Shifts = () => {
     const calNumberOfShiftsOfMonth=()=>{
         let shiftKeys=Object.keys(shifts)
         let filShiftKeys=shiftKeys.filter((e)=>{
-            var [_,mon]=e.split("-")
-            if(mon==month){
+            var [yr,mon]=e.split("-")
+            if(mon==month && yr==year){
                 return true
             }
         })
@@ -232,6 +236,7 @@ const Shifts = () => {
                 onMonthChange={(month) => {
                     console.log(month['month'])
                     setMonth(month['month'])
+                    setYear(month['year'])
                 }}
                 onDayPress={(day) => {
                     setShiftType(true)
@@ -240,7 +245,9 @@ const Shifts = () => {
                 }}
             />
             <View>
+            
                 <NavigationContainer independent={true}>
+                {/* <PaperProvider> */}
                     <Tab.Navigator style={{ minHeight: 1000 }}
                      screenOptions={{
                         activeTintColor: 'green',
@@ -252,7 +259,9 @@ const Shifts = () => {
                         <Tab.Screen name="This Month" component={Tab1} />
                         <Tab.Screen name="Custom Date" component={Tab2} />
                     </Tab.Navigator>
+                    {/* </PaperProvider> */}
                 </NavigationContainer>
+            
             </View>
 
             <Modal

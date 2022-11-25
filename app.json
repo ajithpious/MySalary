@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "MySal",
-    "slug": "MySal",
+    "name": "MyRota",
+    "slug": "MyRota",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appIcon_512x512.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/appIcon_512x512.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.ajithpious.MySal"

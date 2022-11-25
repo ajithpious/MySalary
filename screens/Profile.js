@@ -1,20 +1,3 @@
-// import { View, Text } from 'react-native'
-// import {
-//     Button,
-//     Container,
-//     Icon,
-//     ScreenContainer,
-//     Touchable,
-//     withTheme,
-// } from '@draftbit/ui';
-// import React from 'react'
-// export default function Profile() {
-//     return (<View>
-//         <Text > Profile </Text> 
-//         </View>
-//     )
-// }
-
 import React, { useContext } from 'react';
 import {
   Button,
@@ -27,10 +10,15 @@ import {
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CredentialsContext } from '../components/CredentialsContext';
+import { db } from '../firebase';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Profile = props => {
   const {storedCredentials,setStoredCredentials}=useContext(CredentialsContext)
   const { theme } = props;
+  const [username,setUsername]=useState("")
+  const usersDB = db.collection('users');
 
   const handleLogout = () => {
     AsyncStorage.removeItem('loginCredentials')
@@ -39,6 +27,20 @@ const Profile = props => {
       })
       .catch((error) => console.log(error))
   }
+  const getUserName = async () => {
+    const user = usersDB.doc(storedCredentials)
+    const data = await user.get()
+    // console.logs(data.data()['username'])
+    // return data.data()['username']
+    return data.data()['username']
+
+}
+useEffect(()=>{
+  getUserName().then((name)=>{
+    setUsername(name)
+  })
+
+},[])
   return (
     <ScreenContainer
       style={styles.screenContainerJb}
@@ -69,7 +71,7 @@ const Profile = props => {
             theme.typography.headline3,
           ])}
         >
-          Ajith Pious
+          {username}
         </Text>
         <Button style={styles.buttonP2} type="outline">
         <Text color="black"

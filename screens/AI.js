@@ -102,7 +102,7 @@ export default function AI() {
 
 const style2 = {
   container: {
-    marginTop: 50,
+    marginTop: 10,
     paddingLeft: 10,
     paddingRight: 10
   },
