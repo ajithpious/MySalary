@@ -23,35 +23,35 @@ import { CredentialsContext } from "./CredentialsContext";
 
 const CustomTab = () => {
   const [checked, setChecked] = React.useState("first");
-  const [shiftCount,setShiftCount] = useState({})
-  const [shifts,setShifts]=useState({})
-  const usersDB = db.collection('users');
-  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext)
+  const [shiftCount, setShiftCount] = useState({});
+  const [shifts, setShifts] = useState({});
+  const usersDB = db.collection("users");
+  const { storedCredentials, setStoredCredentials } =
+    useContext(CredentialsContext);
   const [range, setRange] = React.useState({
     startDate: undefined,
     endDate: undefined,
   });
-  useEffect(()=>{
-    getShifts().then((data)=>{
-        setShifts(data)
-        // console.log(shifts)
-    })
-  },[])
-  useEffect(()=>{
-    calNumberOfShiftsOfRange()
-  },[open])
+  useEffect(() => {
+    getShifts().then((data) => {
+      setShifts(data);
+      // console.log(shifts)
+    });
+  }, []);
+  useEffect(() => {
+    calNumberOfShiftsOfRange();
+  }, [open]);
   const getShifts = async () => {
-    const user = usersDB.doc(storedCredentials)
-    const data = await user.get()
+    const user = usersDB.doc(storedCredentials);
+    const data = await user.get();
     // console.log("inside functio=",data.data()['shifts'])
-    if (data.data()['shifts'] == "" || data.data()['shifts'] === undefined) {
-        return {}
+    if (data.data()["shifts"] == "" || data.data()["shifts"] === undefined) {
+      return {};
     } else {
-        // setShifts(data.data()['shifts'])
-        return data.data()['shifts']
+      // setShifts(data.data()['shifts'])
+      return data.data()["shifts"];
     }
-
-}
+  };
   const formatDate = (date) => {
     if (date == undefined) {
       return "Pick Range";
@@ -77,41 +77,45 @@ const CustomTab = () => {
     },
     [setOpen, setRange]
   );
-  const calNumberOfShiftsOfRange=()=>{
-    console.log("shifts=",shifts)
-    if(range['endDate'] == undefined || range['startDate']==undefined){
-        setShiftCount({'long':0,'early':0,'late':0,'Night':0})
-        return {'long':0,'early':0,'late':0,'Night':0}
+  const calNumberOfShiftsOfRange = () => {
+    console.log("shifts=", shifts);
+    if (range["endDate"] == undefined || range["startDate"] == undefined) {
+      setShiftCount({ long: 0, early: 0, late: 0, Night: 0 });
+      return { long: 0, early: 0, late: 0, Night: 0 };
     }
-    let shiftKeys=Object.keys(shifts)
-    let filShiftKeys=shiftKeys.filter((e)=>{
-        var keyDate=new Date(e) 
-        var sDate=new Date(formatDate(range['startDate']))
-        var eDate=new Date(formatDate(range['endDate']))
-        if(keyDate>=sDate && keyDate<=eDate){
-            return true
-        }
-    })
-    console.log("filteed shifts=",filShiftKeys)
-    var longCount=0;
-    var earlyCount=0;
-    var lateCount=0;
-    var nightCount=0;
-    for(const key of filShiftKeys){
-        if(shifts[key]['type']=='Long'){
-            longCount+=1;
-        }else if(shifts[key]['type']=='Early'){
-            earlyCount+=1;
-        }else if(shifts[key]['type']=='Late'){
-            lateCount+=1;
-        }else if(shifts[key]['type']=='Night'){
-            nightCount+=1;
-        }
-
+    let shiftKeys = Object.keys(shifts);
+    let filShiftKeys = shiftKeys.filter((e) => {
+      var keyDate = new Date(e);
+      var sDate = new Date(formatDate(range["startDate"]));
+      var eDate = new Date(formatDate(range["endDate"]));
+      if (keyDate >= sDate && keyDate <= eDate) {
+        return true;
+      }
+    });
+    console.log("filteed shifts=", filShiftKeys);
+    var longCount = 0;
+    var earlyCount = 0;
+    var lateCount = 0;
+    var nightCount = 0;
+    for (const key of filShiftKeys) {
+      if (shifts[key]["type"] == "Long") {
+        longCount += 1;
+      } else if (shifts[key]["type"] == "Early") {
+        earlyCount += 1;
+      } else if (shifts[key]["type"] == "Late") {
+        lateCount += 1;
+      } else if (shifts[key]["type"] == "Night") {
+        nightCount += 1;
+      }
     }
-    setShiftCount({'long':longCount,'early':earlyCount,'late':lateCount,'Night':nightCount})
-    return shiftCount
-}
+    setShiftCount({
+      long: longCount,
+      early: earlyCount,
+      late: lateCount,
+      Night: nightCount,
+    });
+    return shiftCount;
+  };
   return (
     <View>
       <View style={[{ flexDirection: "row" }]}>
@@ -149,24 +153,33 @@ const CustomTab = () => {
           </DataTable.Row>
         </DataTable>
       </View>
+      <View style={styles.calculateButton}>
+        <Button
+          onPress={calNumberOfShiftsOfRange}
+          uppercase={false}
+          mode="contained"
+        >
+          Calculate
+        </Button>
+      </View>
       <View>
-      <DataTable>
-            <DataTable.Row>
-                <DataTable.Cell>Long Day</DataTable.Cell>
-                <DataTable.Cell>{shiftCount['long']}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-                <DataTable.Cell>Early</DataTable.Cell>
-                <DataTable.Cell>{shiftCount['early']}</DataTable.Cell> 
-            </DataTable.Row>
-            <DataTable.Row>
-                <DataTable.Cell>Late</DataTable.Cell>
-                <DataTable.Cell>{shiftCount['late']}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-                <DataTable.Cell>Night</DataTable.Cell>
-                <DataTable.Cell>{shiftCount['Night']}</DataTable.Cell>
-            </DataTable.Row>
+        <DataTable>
+          <DataTable.Row>
+            <DataTable.Cell>Long Day</DataTable.Cell>
+            <DataTable.Cell>{shiftCount["long"]}</DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Early</DataTable.Cell>
+            <DataTable.Cell>{shiftCount["early"]}</DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Late</DataTable.Cell>
+            <DataTable.Cell>{shiftCount["late"]}</DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Night</DataTable.Cell>
+            <DataTable.Cell>{shiftCount["Night"]}</DataTable.Cell>
+          </DataTable.Row>
         </DataTable>
       </View>
       <DatePickerModal
@@ -202,4 +215,10 @@ const CustomTab = () => {
 
 export default CustomTab;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    calculateButton:{
+        padding:10,
+        paddingLeft:50,
+        paddingRight:50
+    }
+});

@@ -24,7 +24,9 @@ const SignUpScreen = () => {
                 const userRef=usersDB.doc(user.email);
                 await userRef.set({
                     "username":name,
-                    'shifts':""
+                    'shifts':"",
+                    'basicPay':9.5,
+                    'weekHour':40
                   });
                 // navigation.navigate('RegSuccess');
                 setLoading(false)
